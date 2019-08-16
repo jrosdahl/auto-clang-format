@@ -8,9 +8,9 @@ the buffer is saved to its file.
 Installation
 ------------
 
-`auto-clang-format-mode` depends on the [clang-format] package.
+`auto-clang-format-mode` depends on the [`clang-format`] package.
 
-To load and enable auto-clang-format-mode, put something like this in your
+To load and enable `auto-clang-format-mode`, put something like this in your
 Emacs configuration:
 
 ```elisp
@@ -27,8 +27,8 @@ Configuration
 
   A function that should return non-`nil` if `clang-format-buffer` should be
   called when the mode is active, otherwise `nil`. The default function makes
-  sure that clang-format is not called if `clang-format-style` is `'file`
-  (which is the default) but no .clang-format file is present.
+  sure that `clang-format-buffer` is not called if `clang-format-style` is
+  `'file` (which is the default) but no `.clang-format` file is present.
 
 
 [clang-format]: https://melpa.org/#/clang-format

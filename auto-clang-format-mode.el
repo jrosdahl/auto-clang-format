@@ -37,7 +37,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; auto-clang-format-mode is a minor mode that runs `clang-format-buffer'
+;; auto-clang-format-mode is a minor mode that runs clang-format-buffer
 ;; before the buffer is saved to its file.
 ;;
 ;; INSTALLATION
@@ -60,24 +60,24 @@
 ;; * auto-clang-format-mode-enable-p-function (default:
 ;;   auto-clang-format-mode-default-enable-p)
 ;;
-;;   A function that should return non-nil if `clang-format-buffer' should be
+;;   A function that should return non-nil if clang-format-buffer should be
 ;;   called when the mode is active, otherwise nil. The default function makes
-;;   sure that clang-format is not called if `clang-format-style' is 'file
+;;   sure that clang-format-buffer is not called if clang-format-style is 'file
 ;;   (which is the default) but no .clang-format file is present.
 
 (require 'clang-format)
 
 (defcustom auto-clang-format-mode-enable-p-function
   'auto-clang-format-mode-default-enable-p
-  "A function that determines whether clang-format-buffer should
-be called on buffer save."
+  "A function that determines whether `clang-format-buffer'
+should be called on buffer save."
   :group 'auto-clang-format-mode
   :type '(choice (const auto-clang-format-mode-default-enable-p)
                  function))
 
 (defun auto-clang-format-mode-default-enable-p ()
-  "If clang-format-style is 'file, only run `clang-format-buffer'
-on save if a .clang-format file is found."
+  "If `clang-format-style' is 'file, only run
+`clang-format-buffer' on save if a .clang-format file is found."
   (or (not (string= clang-format-style "file"))
       (locate-dominating-file "." ".clang-format")))
 
@@ -87,13 +87,13 @@ on save if a .clang-format file is found."
 
 ;;;###autoload
 (define-minor-mode auto-clang-format-mode
-  "Toggle auto-clang-format-mode.
+  "Toggle `auto-clang-format-mode'.
 
-With a prefix argument ARG, enable auto-clang-format-mode if ARG is
-positive, and disable it otherwise. If called from Lisp, enable
-the mode if ARG is omitted or nil.
+With a prefix argument ARG, enable `auto-clang-format-mode' if
+ARG is positive, and disable it otherwise. If called from Lisp,
+enable the mode if ARG is omitted or nil.
 
-When auto-clang-format-mode is enabled, `clang-format-buffer'
+When `auto-clang-format-mode' is enabled, `clang-format-buffer'
 will be run before the buffer is saved to its file."
   :init-value nil
   :lighter " ACF"
