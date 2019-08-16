@@ -1,4 +1,4 @@
-;;; auto-clang-format-mode.el --- Emacs
+;;; auto-clang-format-mode.el --- Minor mode that runs clang-format on save
 ;;
 ;; Copyright (C) 2019 Joel Rosdahl
 ;;
@@ -104,8 +104,6 @@ will be run before the buffer is saved to its file."
       (add-hook 'before-save-hook 'auto-clang-format-mode--before-save nil t)
     (remove-hook 'before-save-hook 'auto-clang-format-mode--before-save t)))
 
-(defun turn-on-auto-clang-format-mode ()
-  (clang-format-buffer)
-  (auto-clang-format-mode 1))
-
 (provide 'auto-clang-format-mode)
+
+;;; auto-clang-format-mode.el ends here
