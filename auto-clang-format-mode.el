@@ -3,6 +3,7 @@
 ;; Copyright (C) 2019 Joel Rosdahl
 ;;
 ;; Author: Joel Rosdahl <joel@rosdahl.net>
+;; Version: 1.0
 ;; License: BSD-3-clause
 ;; Package-Requires: ((clang-format "20180406.1514"))
 ;; URL: https://github.com/jrosdahl/auto-clang-format-mode
@@ -64,6 +65,8 @@
 ;;   called when the mode is active, otherwise nil. The default function makes
 ;;   sure that clang-format-buffer is not called if clang-format-style is 'file
 ;;   (which is the default) but no .clang-format file is present.
+
+;;; Code:
 
 (require 'clang-format)
 
