@@ -53,7 +53,7 @@
 ;; Emacs configuration:
 ;;
 ;;   (require 'auto-clang-format-mode)
-;;   (add-hook 'c++-mode-hook 'auto-clang-format-mode)
+;;   (add-hook 'c++-mode-hook #'auto-clang-format-mode)
 ;;
 ;; CONFIGURATION
 ;; =============
@@ -71,7 +71,7 @@
 (require 'clang-format)
 
 (defcustom auto-clang-format-mode-enable-p-function
-  'auto-clang-format-mode-default-enable-p
+  #'auto-clang-format-mode-default-enable-p
   "A function that determines if the buffers should be formatted on save."
   :group 'auto-clang-format-mode
   :type '(choice (const auto-clang-format-mode-default-enable-p)
@@ -102,8 +102,8 @@ will be run before the buffer is saved to its file."
   :init-value nil
   :lighter " ACF"
   (if auto-clang-format-mode
-      (add-hook 'before-save-hook 'auto-clang-format-mode--before-save nil t)
-    (remove-hook 'before-save-hook 'auto-clang-format-mode--before-save t)))
+      (add-hook 'before-save-hook #'auto-clang-format-mode--before-save nil t)
+    (remove-hook 'before-save-hook #'auto-clang-format-mode--before-save t)))
 
 (provide 'auto-clang-format-mode)
 
