@@ -1,11 +1,11 @@
-;;; auto-clang-format-mode.el --- Minor mode that runs clang-format on save
+;;; auto-clang-format-mode.el --- Minor mode that runs clang-format on save -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2019 Joel Rosdahl
 ;;
 ;; Author: Joel Rosdahl <joel@rosdahl.net>
 ;; Version: 1.0
 ;; License: BSD-3-clause
-;; Package-Requires: ((clang-format "20180406.1514"))
+;; Package-Requires: ((emacs "24") (clang-format "20180406.1514"))
 ;; URL: https://github.com/jrosdahl/auto-clang-format-mode
 ;;
 ;; Redistribution and use in source and binary forms, with or without
