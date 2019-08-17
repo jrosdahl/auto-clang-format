@@ -72,15 +72,16 @@
 
 (defcustom auto-clang-format-mode-enable-p-function
   'auto-clang-format-mode-default-enable-p
-  "A function that determines whether `clang-format-buffer'
-should be called on buffer save."
+  "A function that determines if the buffers should be formatted on save."
   :group 'auto-clang-format-mode
   :type '(choice (const auto-clang-format-mode-default-enable-p)
                  function))
 
 (defun auto-clang-format-mode-default-enable-p ()
-  "If `clang-format-style' is 'file, only run
-`clang-format-buffer' on save if a .clang-format file is found."
+  "The default `auto-clang-format-mode-enable-p-function'.
+
+If `clang-format-style' is 'file, only run `clang-format-buffer'
+on save if a .clang-format file is found."
   (or (not (string= clang-format-style "file"))
       (locate-dominating-file "." ".clang-format")))
 
