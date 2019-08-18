@@ -8,7 +8,7 @@ the buffer is saved to its file.
 Installation
 ------------
 
-`auto-clang-format-mode` depends on the [`clang-format`] package.
+`auto-clang-format-mode` depends on the [clang-format] package.
 
 To load and enable `auto-clang-format-mode`, put something like this in your
 Emacs configuration:
