@@ -86,6 +86,7 @@ on save if a .clang-format file is found."
       (locate-dominating-file "." ".clang-format")))
 
 (defun auto-clang-format-mode--before-save ()
+  "[internal] Function run from `before-save-hook'."
   (when (funcall auto-clang-format-mode-enable-p-function)
     (clang-format-buffer)))
 
