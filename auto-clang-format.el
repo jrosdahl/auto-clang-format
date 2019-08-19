@@ -1,4 +1,4 @@
-;;; auto-clang-format-mode.el --- Minor mode that runs clang-format on save -*- lexical-binding: t; -*-
+;;; auto-clang-format.el --- Minor mode that runs clang-format on save -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2019 Joel Rosdahl
 ;;
@@ -6,7 +6,7 @@
 ;; Version: 1.0
 ;; License: BSD-3-clause
 ;; Package-Requires: ((emacs "24") (clang-format "20180406.1514"))
-;; URL: https://github.com/jrosdahl/auto-clang-format-mode
+;; URL: https://github.com/jrosdahl/auto-clang-format
 ;;
 ;; Redistribution and use in source and binary forms, with or without
 ;; modification, are permitted provided that the following conditions are met:
@@ -38,74 +38,67 @@
 ;;
 ;;; Commentary:
 ;;
-;; auto-clang-format-mode is a minor mode that runs clang-format-buffer
-;; before the buffer is saved to its file.
+;; auto-clang-format defines is a minor mode (auto-clang-format-mode) that runs
+;; clang-format-buffer before the buffer is saved to its file.
 ;;
 ;; INSTALLATION
 ;; ============
 ;;
-;; auto-clang-format-mode depends on the clang-format package, which can be
-;; found here:
+;; auto-clang-format depends on the clang-format package, which can be found
+;; here:
 ;;
 ;;   https://melpa.org/#/clang-format
 ;;
-;; To load and enable auto-clang-format-mode, put something like this in your
-;; Emacs configuration:
+;; To load and enable auto-clang-format-mode unconditionally, put something
+;; like this in your Emacs configuration:
 ;;
-;;   (require 'auto-clang-format-mode)
+;;   (require 'auto-clang-format)
 ;;   (add-hook 'c++-mode-hook #'auto-clang-format-mode)
 ;;
-;; CONFIGURATION
-;; =============
+;; Note that if there is no .clang-format file in the directory tree and you
+;; haven't set clang-format-style to a style then clang-format-buffer will
+;; happily format your code using the default clang-format style, which maybe
+;; isn't what you want. If so, you can use
+;; auto-clang-format-enable-if-appropriate instead:
 ;;
-;; * auto-clang-format-mode-enable-p-function (default:
-;;   auto-clang-format-mode-default-enable-p)
+;;   (require 'auto-clang-format)
+;;   (add-hook 'c++-mode-hook #'auto-clang-format-enable-if-appropriate)
 ;;
-;;   A function that should return non-nil if clang-format-buffer should be
-;;   called when the mode is active, otherwise nil. The default function makes
-;;   sure that clang-format-buffer is not called if clang-format-style is 'file
-;;   (which is the default) but no .clang-format file is present.
+;; auto-clang-format-enable-if-appropriate enables auto-clang-format-mode if
+;; there is a .clang-format file in the directory tree or if clang-format-style
+;; is set to something else than "file".
 
 ;;; Code:
 
 (require 'clang-format)
 
-(defcustom auto-clang-format-mode-enable-p-function
-  #'auto-clang-format-mode-default-enable-p
-  "A function that determines if the buffers should be formatted on save."
-  :group 'auto-clang-format-mode
-  :type '(choice (const auto-clang-format-mode-default-enable-p)
-                 function))
+;;;###autoload
+(defun auto-clang-format-enable-if-appropriate ()
+  "Enable Auto-Clang-Format mode if appropriate.
 
-(defun auto-clang-format-mode-default-enable-p ()
-  "The default `auto-clang-format-mode-enable-p-function'.
-
-If `clang-format-style' is 'file, only run `clang-format-buffer'
-on save if a .clang-format file is found."
-  (or (not (string= clang-format-style "file"))
-      (locate-dominating-file "." ".clang-format")))
-
-(defun auto-clang-format-mode--before-save ()
-  "[internal] Function run from `before-save-hook'."
-  (when (funcall auto-clang-format-mode-enable-p-function)
-    (clang-format-buffer)))
+This function enables Auto-Clang-Format mode if a .clang-format
+file is found or if `clang-format-style' is not \"file\"."
+  (interactive)
+  (when (or (not (string= clang-format-style "file"))
+            (locate-dominating-file "." ".clang-format"))
+    (auto-clang-format-mode 1)))
 
 ;;;###autoload
 (define-minor-mode auto-clang-format-mode
-  "Toggle `auto-clang-format-mode'.
+  "Toggle Auto-Clang-Format mode.
 
-With a prefix argument ARG, enable `auto-clang-format-mode' if
-ARG is positive, and disable it otherwise. If called from Lisp,
+With a prefix argument ARG, enable Auto-Clang-Format mode if ARG
+is positive, and disable it otherwise. If called from Lisp,
 enable the mode if ARG is omitted or nil.
 
-When `auto-clang-format-mode' is enabled, `clang-format-buffer'
+When Auto-Clang-Format mode is enabled, `clang-format-buffer'
 will be run before the buffer is saved to its file."
   :init-value nil
   :lighter " ACF"
   (if auto-clang-format-mode
-      (add-hook 'before-save-hook #'auto-clang-format-mode--before-save nil t)
-    (remove-hook 'before-save-hook #'auto-clang-format-mode--before-save t)))
+      (add-hook 'before-save-hook #'clang-format-buffer nil t)
+    (remove-hook 'before-save-hook #'clang-format-buffer t)))
 
-(provide 'auto-clang-format-mode)
+(provide 'auto-clang-format)
 
-;;; auto-clang-format-mode.el ends here
+;;; auto-clang-format.el ends here

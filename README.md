@@ -1,34 +1,37 @@
-auto-clang-format-mode
-======================
+auto-clang-format
+=================
 
-`auto-clang-format-mode` is a minor mode that runs `clang-format-buffer` before
-the buffer is saved to its file.
+`auto-clang-format` is an Emacs package that defines a minor mode
+(`auto-clang-format-mode`) that runs `clang-format-buffer` before the buffer is
+saved to its file.
 
 
 Installation
 ------------
 
-`auto-clang-format-mode` depends on the [clang-format] package.
+`auto-clang-format` depends on the [clang-format] package.
 
-To load and enable `auto-clang-format-mode`, put something like this in your
-Emacs configuration:
+To load and enable `auto-clang-format-mode` unconditionally, put something like
+this in your Emacs configuration:
 
 ```elisp
-(require 'auto-clang-format-mode)
+(require 'auto-clang-format)
 (add-hook 'c++-mode-hook 'auto-clang-format-mode)
 ```
 
+Note that if there is no ".clang-format" file in the directory tree and you
+haven't set `clang-format-style` to a style then `clang-format-buffer` will
+happily format your code using the default clang-format style, which maybe
+isn't what you want. If so, you can use
+`auto-clang-format-enable-if-appropriate` instead:
 
-Configuration
--------------
+```elisp
+(require 'auto-clang-format)
+(add-hook 'c++-mode-hook #'auto-clang-format-enable-if-appropriate)
+```
 
-* `auto-clang-format-mode-enable-p-function` (default:
-  `auto-clang-format-mode-default-enable-p`)
-
-  A function that should return non-`nil` if `clang-format-buffer` should be
-  called when the mode is active, otherwise `nil`. The default function makes
-  sure that `clang-format-buffer` is not called if `clang-format-style` is
-  `'file` (which is the default) but no `.clang-format` file is present.
-
+`auto-clang-format-enable-if-appropriate` enables `auto-clang-format-mode` if
+there is a ".clang-format"" file in the directory tree or if
+`clang-format-style` is set to something else than "file".
 
 [clang-format]: https://melpa.org/#/clang-format
