@@ -3,7 +3,11 @@ auto-clang-format
 
 `auto-clang-format` is an Emacs package that defines a minor mode
 (`auto-clang-format-mode`) that runs `clang-format-buffer` before the buffer is
-saved to its file.
+saved to its file. Exception: `clang-format-buffer` will not be run if a style
+hasn't been selected, i.e. if there is no ".clang-format" file in the directory
+tree and `clang-format-style` hasn't been set to an explicit style. If the
+minor mode will call `clang-format-buffer` the mode line will include the
+indicator "ACF", otherwise "!ACF".
 
 
 Installation
@@ -18,20 +22,5 @@ this in your Emacs configuration:
 (require 'auto-clang-format)
 (add-hook 'c++-mode-hook 'auto-clang-format-mode)
 ```
-
-Note that if there is no ".clang-format" file in the directory tree and you
-haven't set `clang-format-style` to a style then `clang-format-buffer` will
-happily format your code using the default clang-format style, which maybe
-isn't what you want. If so, you can use
-`auto-clang-format-enable-if-appropriate` instead:
-
-```elisp
-(require 'auto-clang-format)
-(add-hook 'c++-mode-hook #'auto-clang-format-enable-if-appropriate)
-```
-
-`auto-clang-format-enable-if-appropriate` enables `auto-clang-format-mode` if
-there is a ".clang-format"" file in the directory tree or if
-`clang-format-style` is set to something else than "file".
 
 [clang-format]: https://melpa.org/#/clang-format

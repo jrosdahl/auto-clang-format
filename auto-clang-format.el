@@ -39,7 +39,12 @@
 ;;; Commentary:
 ;;
 ;; auto-clang-format defines is a minor mode (auto-clang-format-mode) that runs
-;; clang-format-buffer before the buffer is saved to its file.
+;; clang-format-buffer before the buffer is saved to its file. Exception:
+;; clang-format-buffer will not be run if a style hasn't been selected, i.e. if
+;; there is no .clang-format file in the directory tree and clang-format-style
+;; hasn't been set to an explicit style. If the minor mode will call
+;; clang-format-buffer the mode line will include the indicator "ACF",
+;; otherwise "!ACF".
 ;;
 ;; INSTALLATION
 ;; ============
@@ -54,34 +59,13 @@
 ;;
 ;;   (require 'auto-clang-format)
 ;;   (add-hook 'c++-mode-hook #'auto-clang-format-mode)
-;;
-;; Note that if there is no .clang-format file in the directory tree and you
-;; haven't set clang-format-style to a style then clang-format-buffer will
-;; happily format your code using the default clang-format style, which maybe
-;; isn't what you want. If so, you can use
-;; auto-clang-format-enable-if-appropriate instead:
-;;
-;;   (require 'auto-clang-format)
-;;   (add-hook 'c++-mode-hook #'auto-clang-format-enable-if-appropriate)
-;;
-;; auto-clang-format-enable-if-appropriate enables auto-clang-format-mode if
-;; there is a .clang-format file in the directory tree or if clang-format-style
-;; is set to something else than "file".
 
 ;;; Code:
 
 (require 'clang-format)
 
-;;;###autoload
-(defun auto-clang-format-enable-if-appropriate ()
-  "Enable Auto-Clang-Format mode if appropriate.
-
-This function enables Auto-Clang-Format mode if a .clang-format
-file is found or if `clang-format-style' is not \"file\"."
-  (interactive)
-  (when (or (not (string= clang-format-style "file"))
-            (locate-dominating-file "." ".clang-format"))
-    (auto-clang-format-mode 1)))
+(defvar auto-clang-mode--enabled)
+(make-variable-buffer-local 'auto-clang-mode--enabled)
 
 ;;;###autoload
 (define-minor-mode auto-clang-format-mode
@@ -92,11 +76,18 @@ is positive, and disable it otherwise. If called from Lisp,
 enable the mode if ARG is omitted or nil.
 
 When Auto-Clang-Format mode is enabled, `clang-format-buffer'
-will be run before the buffer is saved to its file."
+will be run before the buffer is saved to its file if a
+.clang-format file is found in the directory tree or if
+`clang-format-style' is not \"file\"."
   :init-value nil
-  :lighter " ACF"
+  :lighter (:eval (if auto-clang-mode--enabled " ACF" " !ACF"))
   (if auto-clang-format-mode
-      (add-hook 'before-save-hook #'clang-format-buffer nil t)
+      (progn
+        (setq auto-clang-mode--enabled
+              (or (not (string= clang-format-style "file"))
+                  (locate-dominating-file "." ".clang-format")))
+        (when auto-clang-mode--enabled
+                (add-hook 'before-save-hook #'clang-format-buffer nil t)))
     (remove-hook 'before-save-hook #'clang-format-buffer t)))
 
 (provide 'auto-clang-format)
